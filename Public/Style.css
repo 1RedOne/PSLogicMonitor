@@ -1,0 +1,32 @@
+﻿	table#data{
+		margin-left: 45px;
+		margin-top: 25px;
+		padding-top: 100px;
+		padding-left: 15%;
+		padding: 20%;
+		width:50%; 
+		border-collapse:collapse; 
+		font-size : 77%;
+  font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	}
+	table#data td{ 
+		padding:7px; border:#4e95f4 1px solid;
+	}
+	/* provide some minimal visual accomodation for IE8 and below */
+	table#data tr{
+		background: #A3b395;
+	}
+	/*  Define the background color for all the ODD background rows  */
+	table#data tr:nth-child(odd){ 
+		background: #F9F6F3;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	table#data tr:nth-child(even){
+		background: #C8C8AC;
+	}
+	
+	table#data th{
+		background: #C2A385;
+		font-size : 88%;
+  font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+	}
