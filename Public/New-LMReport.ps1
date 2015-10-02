@@ -1,4 +1,30 @@
-﻿Function New-LMReport {
+﻿<#
+.Synopsis
+    Generate a Logic Monitor Style Report with custom logo and branding
+.DESCRIPTION
+    Use this cmdlet to generate the body of an e-mail message to run a custom query and display the output as a LogicMonitor report
+.EXAMPLE
+    >$body = New-LMReport -description "Aggregate Volumes over the last 24 hours" -company 'SomeClient' `
+    -reportName 'NetApp Volumes over Thresholds' -inputobject (Get-LMAggregateUsage -credential $credential -Verbose) -subtitle ldc-cdot01 
+
+    New-SMTPMessage -HTMLBody $body <other params>
+
+    Use the New-LMReport cmdlet to generate a report using the output of Get-LMAggregate Usage.  IN this case, the default NetApp Aggregate of LDC-CDOT01 will be called by Get-LMAggregateUsage, but any host viewable in logicMonitor could be used instead.
+
+.EXAMPLE
+    $params = @{
+    'description' = "Aggregate Volumes over the last 24 hours";
+        'company' = 'Some Client'
+     'reportName' = 'NetApp Volumes over Thresholds'
+    'inputObject' = (Get-LMAggregateUsage -credential $credential)
+       'subtitle' = 'NameOfMachine'}
+
+    New-SMTPMessage -HtmlBody (New-LMReport @params)
+
+    
+    In this example, the many params for this cmdlet are stored in a variable to call them via a technique called splatting.  For more information on splatting, see get-help about_splatting.  
+#>
+Function New-LMReport {
 param($description,$company,$reportName,
 [Parameter(Mandatory=$false, 
                     ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]$inputobject,
@@ -128,6 +154,3 @@ footer a:link, footer a:visited {
 $code = $inputObject | ConvertTo-Html -Head $header
 $code -replace '<table>','<table id="data">'
 }
-
-New-LMReport -description "Aggregate Volumes over the last 24 hours" -company 'King&Spalding' `
-    -reportName 'NetApp Volumes over Thresholds' -inputobject (Get-LMAggregateUsage -credential $credential -Verbose) -subtitle ldc-cdot01 > t:\file.html
