@@ -1,5 +1,4 @@
 #PSLogicMonitor
-===========
 Some PowerShell Cmdlets to work with LogicMonitor's various APIs
 
 Installation
@@ -30,12 +29,12 @@ Usage
  
  >Generates a LogicMonitor Style report in HTML, with a Description of $Description, a custom Report Name, and CompanyName
  
- ####### Example Report
+#####Example Report
 
  
-![Althought this data woudl be embedded in an email, usually, this is what the report looks like](https://github.com/1RedOne/PSLogicMonitor/blob/master/img/img01.png)
+![eee](https://github.com/1RedOne/PSLogicMonitor/blob/master/img/img01.png)
  
- ###### View all devices (with some Stats) in a HostGroup
+#####View all devices (with some Stats) in a HostGroup
  
     >Get-LMHostGroup -credential $credential | ? Name -like "KSL*"  | Get-LMHostGroupChildren
     
@@ -73,4 +72,21 @@ Usage
     inNSP                 : False
     effectiveAlertEnabled : True
  
- >Generates a LogicMonitor Style report in HTML, with a Description of $Description, a custom Report Name, and CompanyName
+ >Use this cmdlet to find the ID of a device and see a general list of all of the devices in a hostgroup.  You can use the ID value to see particular info on a device. 
+
+#How to make new cmdlets
+-----
+
+All of these cmdlets were created by writing wrappers around LogicMonitor's REST or RPC APIs.  
+
+The full [API catalog is available here](http://help.logicmonitor.com/developers-guide/api-index/).  
+
+The structure of most wrappers is like the following:
+
+    $auth = "c=<companyName>&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
+    $APIEndpoint = "*SomeEndPointHere" #Check the API Index above and put one of the names here
+    $base = "https://<companyName>.logicmonitor.com/santaba/rpc/$APIEndPoint?&$auth"
+    $results = invoke-webrequest $base  | select -ExpandProperty Content | ConvertFrom-Json |  select -ExpandProperty Data 
+    #return $results
+    
+ Simply find an endpoint, see what params it takes and add them to $base, after $ApiEndpoint? and before &$Auth.  Append multiple params using an ampersand(&).
