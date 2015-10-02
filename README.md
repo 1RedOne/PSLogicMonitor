@@ -35,3 +35,42 @@ Usage
  
 ![Althought this data woudl be embedded in an email, usually, this is what the report looks like](https://github.com/1RedOne/PSLogicMonitor/blob/master/img/img01.png)
  
+ ###### View all devices (with some Stats) in a HostGroup
+ 
+    >Get-LMHostGroup -credential $credential | ? Name -like "KSL*"  | Get-LMHostGroupChildren
+    
+    alertEnable           : True
+    createdOn             : 1404416417
+    groupType             : 0
+    id                    : 36
+    parentId              : 35
+    numOfHosts            : 5
+    status                : alert-confirmed
+    description           : 
+    appliesTo             : 
+    name                  : Atlanta
+    signaled              : True
+    inSDT                 : False
+    fullPath              : KSL/Atlanta
+    type                  : HOSTGROUP
+    inNSP                 : False
+    effectiveAlertEnabled : True
+    
+    alertEnable           : True
+    createdOn             : 1404416633
+    groupType             : 0
+    id                    : 37
+    parentId              : 35
+    numOfHosts            : 5
+    status                : alert-confirmed
+    description           : QTS Suwanee
+    appliesTo             : 
+    name                  : BCS
+    signaled              : True
+    inSDT                 : False
+    fullPath              : KSL/BCS
+    type                  : HOSTGROUP
+    inNSP                 : False
+    effectiveAlertEnabled : True
+ 
+ >Generates a LogicMonitor Style report in HTML, with a Description of $Description, a custom Report Name, and CompanyName
