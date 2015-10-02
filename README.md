@@ -33,7 +33,5 @@ Usage
  ####### Example Report
 
  
-![approve oAuth and away you go!](https://github.com/1RedOne/PSReddit/blob/master/img/Approve.png)
+![Althought this data woudl be embedded in an email, usually, this is what the report looks like](https://github.com/1RedOne/PSLogicMonitor/blob/master/img/img01.png)
  
-
-####Links####
