@@ -46,16 +46,18 @@ param([Parameter(Mandatory=$true,Position=0)]$credential,$hostname='ldc-cdot1',
      ForEach ($device in $devices){
         
         #Figure out better logic
-        $value = if (($result.$($device.Name)[-1][2] -eq 'NaN')){
-            if (($result.$($device.Name)[-2][2] -eq 'NaN')){
-                $result.$($device.Name)[-3][2]
-            }
-             else{$result.$($device.Name)[-2][2]}
-            }
-            else{
-            $result.$($device.Name)[-1][2]
-        }
-
+#        $value = if (($result.$($device.Name)[-1][2] -eq 'NaN')){
+#            if (($result.$($device.Name)[-2][2] -eq 'NaN')){
+#                $result.$($device.Name)[-3][2]
+#            }
+#             else{$result.$($device.Name)[-2][2]}
+#            }
+#            else{
+#            $result.$($device.Name)[-1][2]
+#        }
+        $i = -1
+        while(($result.$($device.Name)[$i][2] -eq 'NaN')){$i--}
+        $value = $result.$($device.Name)[$i][2]
 
         $ThisDeviceCurrent= [math]::Round($value,4)
         Write-Debug "test current value, currently $([math]::Round($value,4))"
