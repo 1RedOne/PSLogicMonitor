@@ -4,7 +4,7 @@
 .DESCRIPTION
     Long description
 .EXAMPLE
-    Get-LMHostGroup -credential $credential | ? Name -like "KSL*"  | Get-LMHostGroupChildren
+    Get-LMHostGroup -credential $credential -Company $company | ? Name -like "KSL*"  | Get-LMHostGroupChildren
 
 
 alertEnable           : True
@@ -45,16 +45,17 @@ Get a listing of all the children device within a host group
 .EXAMPLE
 Get a listing of all device, grouped by the Host
 
-Get-LMHostGroup -credential $credential | Get-LMHostGroupChildren 
+Get-LMHostGroup -credential $credential -Company $company | Get-LMHostGroupChildren 
 #>
  Function Get-LMHostGroupChildren {
 [CmdletBinding()]
 param($credential=$global:credential,
-      [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,Position=1)]$id)
+      [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,Position=1)]$id,
+	  [Parameter(Mandatory=$true,Position=2)]$Company)
 
-    $auth = "c=ivision&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
+    $auth = "c=$Company&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
    
-    $base = "https://ivision.logicmonitor.com/santaba/rpc/getHostGroupChildren?hostGroupId=$id&$auth"
+    $base = "https://$Company.logicmonitor.com/santaba/rpc/getHostGroupChildren?hostGroupId=$id&$auth"
  $results = invoke-webrequest $base  | select -ExpandProperty Content| ConvertFrom-Json |  select -ExpandProperty Data 
  write-debug "test me"
  return ($results.items )

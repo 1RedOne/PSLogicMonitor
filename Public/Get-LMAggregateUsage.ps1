@@ -4,7 +4,7 @@
 .DESCRIPTION
     Long description
 .EXAMPLE
-    Get-LMAggregateUsage -credential $credential  | select -First 2 | ft
+    Get-LMAggregateUsage -credential $credential -company $company  | select -First 2 | ft
 
     Name                       Current     Min     Max   Avg StartingUsage Change(%)
     ----                       -------     ---     ---   --- ------------- ---------
@@ -15,17 +15,19 @@
 #>
 Function Get-LMAggregateUsage {
 [CmdletBinding()]
-param([Parameter(Mandatory=$true,Position=0)]$credential,$hostname='ldc-cdot1',
-       [switch]$average,
-       [switch]$minimum,
-       [switch]$maximum)
+param([Parameter(Mandatory=$true,Position=0)]$credential,
+        [Parameter(Mandatory=$true,Position=1)]$company,
+        $hostname='ldc-cdot1',
+        [switch]$average,
+        [switch]$minimum,
+        [switch]$maximum)
 
     Write-Verbose "Statistics for $hostname"
 
-    $auth    = "c=ivision&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
+    $auth    = "c=$company&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
 
 
-    $base = "https://ivision.logicmonitor.com/santaba/rpc/getData?$auth"
+    $base = "https://$company.logicmonitor.com/santaba/rpc/getData?$auth"
 
     $1st = "$base&host=$hostname&dataSource=NetApp%20cDOT%20Aggregate%20Usage-&dataPoint0=SpacePercentUsed&period=24hours"
 
