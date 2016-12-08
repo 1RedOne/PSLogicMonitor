@@ -2,7 +2,7 @@
 .Synopsis
    Use this cmdlet to see a listing of all of the visible HostGroups in Logic Monitor for a given user ID.  
 
-   You must specify -Credential as a valid logicMonitor account.
+   You must specify -Credential and -Company for a valid logicMonitor account.
 .DESCRIPTION
 Long description
 .EXAMPLE
@@ -19,7 +19,7 @@ Domain Controllers          ASH/Norcross/Application Servers/Domain Controllers 
 
    Returns a listing of all HostGroups visible, perfect for filtering with Where-Object in the pipeline.
 .EXAMPLE
-Get-LMHostGroup -credential $credential | ? Name -like "KSL*"  | Get-LMHostGroupChildren
+Get-LMHostGroup -credential $credential -Compant $company | ? Name -like "KSL*"  | Get-LMHostGroupChildren
 
 
 alertEnable           : True
@@ -61,11 +61,12 @@ effectiveAlertEnabled : True
  Function Get-LMHostGroup {
 [CmdletBinding()]
 param([Parameter(Mandatory=$true,Position=0)]$credential,
-      [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=1)]$id)
+      [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=1)]$id,
+	  [Parameter(Mandatory=$true,Position=2)]$Company)
 
-    $auth = "c=ivision&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
-   if (-not($id)){$base = "https://ivision.logicmonitor.com/santaba/rpc/getHostGroups?$auth"}
-             else{$base = "https://ivision.logicmonitor.com/santaba/rpc/getHostGroup?hostGroupId=$id&$auth"}
+    $auth = "c=$Company&u=$($credential.UserName)&p=$($credential.GetNetworkCredential().Password)"
+   if (-not($id)){$base = "https://$Company.logicmonitor.com/santaba/rpc/getHostGroups?$auth"}
+             else{$base = "https://$Company.logicmonitor.com/santaba/rpc/getHostGroup?hostGroupId=$id&$auth"}
  $results = invoke-webrequest $base  | select -ExpandProperty Content| ConvertFrom-Json |  select -ExpandProperty Data 
  write-debug "test me"
  return ($results | select Name,FullPath,id | sort Fullpath)
